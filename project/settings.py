@@ -160,8 +160,8 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Ваш фронтенд
     "http://127.0.0.1:3000",  # Для безопасности
-    "https://astro-circle.onrender.com",  # Ваш домен на Render
-    "https://astro-circle.netlify.app",  # Ваш домен на Netlify
+    "https://astro-circle-b.onrender.com",  # Ваш домен на Render бэк
+    "https://astro-circle-f.onrender.com",  # Ваш домен на Render фронт
 ]
 
 CORS_ALLOW_CREDENTIALS = True
