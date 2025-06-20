@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-zu+3=xb5)x_54)1r)@c_k%f+m3-0ko6rkik4iup0mf&fz0u$j$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = False
 
-ALLOWED_HOSTS = ['astro-circle.onrender.com', 'localhost', '127.0.0.1', '.onrender.com']
+ALLOWED_HOSTS = ['astro-circle-b.onrender.com', 'localhost', '127.0.0.1', '.onrender.com']
 
 
 # Application definition
@@ -83,12 +83,16 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 
 # Database
-
+#postgresql://astro_4464_user:vjFHBudCL7EsM1ZVa7PJ2I6pBG8kZhpZ@dpg-d17qrpmmcj7s73c695ng-a.oregon-postgres.render.com:5432/astro_4464
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'postgresql://astro_4464_user:vjFHBudCL7EsM1ZVa7PJ2I6pBG8kZhpZ@dpg-d17qrpmmcj7s73c695ng-a.oregon-postgres.render.com:5432/astro_4464'),
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'http://localhost:8000'),
+        'PORT': os.getenv('DB_PORT', '5432'),
+    }
 }
 
 # Password validation
