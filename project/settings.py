@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 
 # Database
-#postgresql://astro_4464_user:vjFHBudCL7EsM1ZVa7PJ2I6pBG8kZhpZ@dpg-d17qrpmmcj7s73c695ng-a.oregon-postgres.render.com:5432/astro_4464
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
