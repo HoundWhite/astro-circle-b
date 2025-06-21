@@ -3,7 +3,7 @@ services:
     name: astro-circle-b
     env: python
     buildCommand: chmod +x build.sh && ./build.sh
-    startCommand: python server/project/manage.py runserver 0.0.0.0:$PORT
+    startCommand: python manage.py runserver 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18

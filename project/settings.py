@@ -85,14 +85,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 #
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'http://localhost:8000'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600
+    )
 }
 
 # Password validation
@@ -162,10 +158,32 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",  # Для безопасности
     "https://astro-circle-b.onrender.com",  # Ваш домен на Render бэк
     "https://astro-circle-f.onrender.com",  # Ваш домен на Render фронт
+    "https://astro-circle.onrender.com",  # Альтернативный домен
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Дополнительные настройки CORS для продакшена
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # Настройки логирования
 LOGGING = {
@@ -198,4 +216,9 @@ AUTHENTICATION_BACKENDS = [
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

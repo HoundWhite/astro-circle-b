@@ -1,6 +1,7 @@
 from django.shortcuts import render
+import json
 # ИМПОРТЫ БЕСКОНЕЧНЫЕ НА ПРЕДСТАВЛЕНИЯ(((((((((((((
-from rest_framework import generics, status
+from rest_framework import generics, status, exceptions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -37,36 +38,50 @@ class UserListView(generics.ListCreateAPIView):
 
 # РЕГА РЕГА
 class RegApiView(APIView):
-    authentication_classes = []  # Отключаем аутентификацию для регистрации
-    permission_classes = []     # Разрешаем доступ без проверки прав
+    authentication_classes = []
+    permission_classes = []
     
     def post(self, request):
-        logger.info(f"Received registration data: {request.data}")
-        serializer = UserSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            logger.info("Serializer is valid")
-            try:
-                user = serializer.save()
-                logger.info(f"User created successfully: {user.email}")
-                token, created = Token.objects.get_or_create(user=user)
-                logger.info(f"Token {'created' if created else 'retrieved'}: {token.key}")
-                return Response({
-                    'success': True,
-                    'token': token.key,
-                    'user_id': user.id,
-                    'email': user.email,
-                    'name': user.name,
-                    'telephon': user.telephon
-                }, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                logger.error(f"Error creating user: {str(e)}")
-                return Response({
-                    'error': str(e)
-                }, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            logger.error(f"Validation errors: {serializer.errors}")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            logger.info(f"Registration attempt with data: {request.data}")
+            
+            # Принудительно парсим JSON, если DRF не сделал это автоматически
+            if not isinstance(request.data, dict):
+                try:
+                    data = json.loads(request.body.decode('utf-8'))
+                    request._full_data = data  # Переопределяем данные
+                except json.JSONDecodeError as e:
+                    logger.error(f"JSON decode error: {e}")
+                    raise exceptions.ParseError("Invalid JSON")
+
+            logger.info(f"Raw data: {request.body.decode('utf-8')}")
+            logger.info(f"Parsed data: {request.data}")
+            
+            serializer = UserSerializer(data=request.data)
+            if not serializer.is_valid():
+                logger.error(f"Serializer errors: {serializer.errors}")
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            user = serializer.save()
+            token = Token.objects.create(user=user)
+            
+            logger.info(f"User {user.email} registered successfully")
+            
+            return Response({
+                'token': token.key,
+                'user_id': user.id,
+                'email': user.email,
+                'name': user.name,
+                'telephon': user.telephon  # Убедитесь, что поле в модели названо так же
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            logger.exception(f"Registration failed: {str(e)}")  # Запишет полный traceback
+            return Response(
+                {"error": "Internal Server Error", "details": str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 
 
 # АУФ АУНТЕФИКАЦИЯ
