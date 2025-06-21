@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 
     'rest_framework',
     'rest_framework.authtoken',
+    'cloudinary',
     'app'
 ]
 
@@ -222,3 +223,14 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+# Cloudinary settings
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'your_cloud_name'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY', 'your_api_key'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'your_api_secret')
+)

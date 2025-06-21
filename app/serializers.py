@@ -70,6 +70,15 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'price', 'image', 'image_url', 'created_at', 'updated_at']
 
     def get_image_url(self, obj):
-        if obj.image:
-            return self.context['request'].build_absolute_uri(obj.image.url)
-        return None
+        # Возвращаем статические изображения из фронтенда
+        image_mapping = {
+            1: "https://astro-circle-f.onrender.com/media/products/amulet.png",
+            2: "https://astro-circle-f.onrender.com/media/products/astro_book.png",
+            3: "https://astro-circle-f.onrender.com/media/products/astro_calendar.png",
+            4: "https://astro-circle-f.onrender.com/media/products/candles.png",
+            5: "https://astro-circle-f.onrender.com/media/products/crystal.png",
+            6: "https://astro-circle-f.onrender.com/media/products/num_book.png",
+            7: "https://astro-circle-f.onrender.com/media/products/num_calendar.png",
+            8: "https://astro-circle-f.onrender.com/media/products/tarot_cards.png",
+        }
+        return image_mapping.get(obj.id, None)
