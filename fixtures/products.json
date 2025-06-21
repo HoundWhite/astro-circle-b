@@ -1,0 +1,98 @@
+[
+  {
+    "model": "app.product",
+    "pk": 1,
+    "fields": {
+      "name": "Амулет защиты",
+      "description": "Древний амулет, защищающий от негативной энергии и сглаза",
+      "price": "1500.00",
+      "image": "products/amulet.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 2,
+    "fields": {
+      "name": "Книга астрологии",
+      "description": "Подробное руководство по астрологии для начинающих",
+      "price": "2500.00",
+      "image": "products/astro_book.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 3,
+    "fields": {
+      "name": "Астрологический календарь",
+      "description": "Календарь с благоприятными днями для важных дел",
+      "price": "800.00",
+      "image": "products/astro_calendar.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 4,
+    "fields": {
+      "name": "Свечи для медитации",
+      "description": "Набор ароматических свечей для медитации и ритуалов",
+      "price": "1200.00",
+      "image": "products/candles.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 5,
+    "fields": {
+      "name": "Кристалл кварца",
+      "description": "Натуральный кристалл кварца для очищения энергии",
+      "price": "3000.00",
+      "image": "products/crystal.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 6,
+    "fields": {
+      "name": "Книга нумерологии",
+      "description": "Исчерпывающее руководство по нумерологии",
+      "price": "1800.00",
+      "image": "products/num_book.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 7,
+    "fields": {
+      "name": "Нумерологический календарь",
+      "description": "Календарь с числовыми значениями каждого дня",
+      "price": "600.00",
+      "image": "products/num_calendar.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "app.product",
+    "pk": 8,
+    "fields": {
+      "name": "Карты Таро",
+      "description": "Классическая колода карт Таро для гадания",
+      "price": "2200.00",
+      "image": "products/tarot_cards.png",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  }
+] 
