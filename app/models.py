@@ -30,29 +30,19 @@ class CustomUserManager(BaseUserManager):
 
 # Создание класса юзер(наследуется от абстрактного юзера)
 class User(AbstractUser):
-    # поля челика Charfield тупо вид поля(текстовое)
     name = models.CharField(max_length=255)
     telephon = models.CharField(max_length=20)
-    # ВНИМАНИЕЕЕ У ЕМЕЙЛА ЕМЕЙЛФИЛД, Unique- разрешение на спецсимволы в поле типа @
     email = models.EmailField(_('email address'), unique=True)
-    password = models.CharField(max_length=255)
-    username = models.CharField(max_length=150, unique=True, null=True, blank=True, default=None)
     
-    # Указываем, что поле для входа - email
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'telephon']  # Добавляем обязательные поля для createsuperuser
+    REQUIRED_FIELDS = ['name', 'telephon']
     
     objects = CustomUserManager()
     
     def save(self, *args, **kwargs):
         if not self.username:
-            # Генерируем уникальный username на основе email
             self.username = f"user_{uuid.uuid4().hex[:8]}"
         super().save(*args, **kwargs)
-    
-    # возвращаем емейл как индетификационные поле
-    def __str__(self):
-        return self.email
 
 # КЛАСС МОДЕЛИ ДЛЯ ТОВАРОВ
 class Product(models.Model):

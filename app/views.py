@@ -40,46 +40,35 @@ class UserListView(generics.ListCreateAPIView):
 class RegApiView(APIView):
     authentication_classes = []
     permission_classes = []
-    
+
     def post(self, request):
         try:
-            logger.info(f"Registration attempt with data: {request.data}")
+            # Принудительно копируем данные запроса
+            data = request.data.copy()
             
-            # Принудительно парсим JSON, если DRF не сделал это автоматически
-            if not isinstance(request.data, dict):
-                try:
-                    data = json.loads(request.body.decode('utf-8'))
-                    request._full_data = data  # Переопределяем данные
-                except json.JSONDecodeError as e:
-                    logger.error(f"JSON decode error: {e}")
-                    raise exceptions.ParseError("Invalid JSON")
-
-            logger.info(f"Raw data: {request.body.decode('utf-8')}")
-            logger.info(f"Parsed data: {request.data}")
+            # Генерируем username если не указан
+            if 'username' not in data:
+                data['username'] = f"user_{uuid.uuid4().hex[:8]}"
             
-            serializer = UserSerializer(data=request.data)
-            if not serializer.is_valid():
-                logger.error(f"Serializer errors: {serializer.errors}")
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = UserSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
             
             user = serializer.save()
-            token = Token.objects.create(user=user)
-            
-            logger.info(f"User {user.email} registered successfully")
+            token, _ = Token.objects.get_or_create(user=user)
             
             return Response({
                 'token': token.key,
                 'user_id': user.id,
                 'email': user.email,
                 'name': user.name,
-                'telephon': user.telephon  # Убедитесь, что поле в модели названо так же
+                'telephon': user.telephon
             }, status=status.HTTP_201_CREATED)
-
+            
         except Exception as e:
-            logger.exception(f"Registration failed: {str(e)}")  # Запишет полный traceback
+            logger.error(f"Registration error: {str(e)}")
             return Response(
-                {"error": "Internal Server Error", "details": str(e)}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": str(e)},
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
